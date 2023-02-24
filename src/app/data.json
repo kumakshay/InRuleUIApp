@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "clientId": 233,
+      "stateOfIssuance": "NE",
+      "id": 3
+    },
+    {
+      "clientId": 233,
+      "stateOfIssuance": "NE",
+      "id": 4
+    }
+  ]
+}
