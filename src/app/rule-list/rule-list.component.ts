@@ -15,6 +15,15 @@ export class RuleListComponent  implements OnInit {
   showSubRules: Boolean = false;  
   mainRuleData: IMainRuleDesc[] = [];
   subRuleData: ISubRuleDesc[] = [];
+  ruleType : String = "";
+  subRuleDesc : ISubRuleDesc | undefined;
+  
+  onSubNodeClicked(node : ISubRuleDesc): void {
+      //fetch the data of the subrule using the subrule Id and the rule type
+      this.ruleType = node.ruleType; 
+      this.subRuleDesc = node;
+      console.log(this.subRuleDesc);
+  } 
 
   onNodeClicked(node: IMainRuleDesc): void {
 
@@ -56,15 +65,14 @@ export class RuleListComponent  implements OnInit {
      node.subRules = this.subRuleData;
    }
   
-
   if(node.subRules?.length! > 0)
   {
     node.isExpanded = true;
   }
-  
+  else
+  node.isExpanded = false; 
   
   console.log(this.subRuleData)
-    
   }
 
   
@@ -74,7 +82,29 @@ export class RuleListComponent  implements OnInit {
   }
 
   ngOnInit(): void {
+
+    //This jquery code is to toggle the tree
+    $(document).ready(function() {
+      // Hide all nested lists by default
+      $('#tree1 ul').hide();
     
+      // Add click event to each node
+      $('#tree1 li').click(function(e) {
+        if ($(this).children('ul').length > 0) { // Check if clicked element is a parent node
+          // Toggle the nested list
+          $(this).children('ul').toggle();
+          e.stopPropagation(); // Stop event bubbling
+        }
+      });
+    
+      // Add click event to each nested list item
+      $('#tree1 li ul li').click(function(e) {
+        e.stopPropagation(); // Stop event bubbling
+      });
+    });
+    
+    
+
 
     this.mainRuleData = [
       {

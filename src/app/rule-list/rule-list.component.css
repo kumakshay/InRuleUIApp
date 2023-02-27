@@ -1,4 +1,9 @@
-
+ /* Hover effect for the '>' icon for the tree */
+.hover:hover {
+  opacity: 0.8;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
   /* Sidebar styles */
   .sidebar {
     height: 100%;
@@ -15,9 +20,11 @@
 
   }
   .sidebar header {
-    font-size: 1.2em;
-    font-weight: bold;
     padding: 15px;
+    background: #435d7d;
+    color: #fff;
+    font-size: 24px;
+
   }
  
   /*Tree Style */

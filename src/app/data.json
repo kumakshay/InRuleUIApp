@@ -1,14 +1,28 @@
 {
   "users": [
     {
-      "clientId": 233,
-      "stateOfIssuance": "NE",
-      "id": 3
+      "clientId": "180",
+      "stateOfIssuance": "CA",
+      "Allowed": "false",
+      "id": 5
     },
     {
-      "clientId": 233,
-      "stateOfIssuance": "NE",
-      "id": 4
+      "clientId": "182",
+      "stateOfIssuance": "NY",
+      "Allowed": "true",
+      "id": 6
+    },
+    {
+      "clientId": "182",
+      "stateOfIssuance": "MI",
+      "Allowed": "false",
+      "id": 7
+    },
+    {
+      "clientId": "184",
+      "stateOfIssuance": "NC",
+      "Allowed": "true",
+      "id": 8
     }
   ]
 }
