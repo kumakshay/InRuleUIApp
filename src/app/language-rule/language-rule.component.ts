@@ -13,13 +13,12 @@ export class LanguageRuleComponent implements OnInit {
   codeMirrorOptions: any = {};
   code : string = "";
 
-  ngOnInit() {
+  ngOnInit() 
     {
       // CodeMirror.fromTextArea(this.editor.nativeElement, {
       //   lineNumbers: true,
       //   mode: 'python',
-      // });
-    
+      // });   
 }
 
   }
