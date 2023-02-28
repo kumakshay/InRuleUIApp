@@ -6,11 +6,16 @@ import { RuleListComponent } from './rule-list/rule-list.component';
 import { DecisionComponent } from './decision/decision.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; 
-import { MatIconModule } from '@angular/material/icon';
 import { LanguageRuleComponent } from './language-rule/language-rule.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
-// import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+interface NgxSpinnerConfig {
+  type?: string;
+}
 
 
 @NgModule({
@@ -26,8 +31,10 @@ import { FooterComponent } from './footer/footer.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule, 
-    MatIconModule,
+    HttpClientModule,
+    MonacoEditorModule.forRoot(),
+    BrowserAnimationsModule,
+    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
       ],
   providers: [],
   bootstrap: [AppComponent],
