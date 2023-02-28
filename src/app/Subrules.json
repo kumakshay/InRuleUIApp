@@ -1,5 +1,7 @@
 
-[ 
+{
+
+"subRules":[
     {
         "unique_id": "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b", 
         "mainruleid": "87273fff-2990-498e-926e-5cd2e50ef829", 
@@ -12,7 +14,7 @@
         "mainruleid": "87273fff-2990-498e-926e-5cd2e50ef829", 
         "rulename": "isClientTurnedOn", 
         "ruletype": "LR",
-        "orderno":2
-         
+        "orderno":2     
     }
 ]
+}

@@ -4,6 +4,7 @@ import {MatTreeFlatDataSource, MatTreeFlattener, MatTreeNodeOutlet} from '@angul
 import { IMainRuleDesc } from '../Interfaces/IMainRuleDesc';
 import { ISubRuleDesc } from '../Interfaces/ISubRuleDesc';
 import * as $ from 'jquery';
+import { RuleListService } from '../Services/RuleList/rule-list.service';
 
 @Component({
   selector: 'app-rule-list',
@@ -12,103 +13,82 @@ import * as $ from 'jquery';
 })
 export class RuleListComponent  implements OnInit {
 
-  showSubRules: Boolean = false;  
+  //showSubRules: Boolean = false;  
   mainRuleData: IMainRuleDesc[] = [];
-  subRuleData: ISubRuleDesc[] = [];
+  subRuleData: any[] = [];
   ruleType : String = "";
   subRuleDesc : ISubRuleDesc | undefined;
   
-  onSubNodeClicked(node : ISubRuleDesc): void {
-      //fetch the data of the subrule using the subrule Id and the rule type
-      this.ruleType = node.ruleType; 
-      this.subRuleDesc = node;
-      console.log(this.subRuleDesc);
-  } 
+  
 
   onNodeClicked(node: IMainRuleDesc): void {
-
    //Get the sub-rules based on the unique id of the parent-rule. 
    //The result coming from the backend will be already sorted based on order number.
-   if(node.uniqueId == "1")
-   {
-    this.subRuleData = [
-      {
-        uniqueId : "1s", 
-        mainRuleId: "1",
-        ruleName: "ChildRule1",
-        ruleType: "DT",
-        orderNo: 1
-      },
-      {
-        uniqueId : "2s", 
-        mainRuleId: "1",
-        ruleName: "ChildRule2",
-        ruleType: "DT",
-        orderNo: 2
-      },
-      {
-        uniqueId : "3s", 
-        mainRuleId: "1",
-        ruleName: "ChildRule3",
-        ruleType: "LR",
-        orderNo: 3
-      },
-      {
-        uniqueId : "4s", 
-        mainRuleId: "1",
-        ruleName: "ChildRule4",
-        ruleType: "LR",
-        orderNo: 4
-      }
-     ];
-
-     node.subRules = this.subRuleData;
-   }
-  
-  if(node.subRules?.length! > 0)
-  {
-    node.isExpanded = true;
-  }
-  else
-  node.isExpanded = false; 
-  
-  console.log(this.subRuleData)
+  node.isExpanded = !node.isExpanded;
+  //   this._ruleListService.getSubRulesOfMainRule(node.uniqueId).subscribe(
+  //     data => {
+  //          this.subRuleDesc = data;
+  //          console.log("This one is the data" + data)
+  //         },
+  // );
+  //console.log("This one " + node.subRules)
+    if(node.uniqueId == "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b")
+    {
+        node.subRules = [
+          {
+            uniqueId: "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b", 
+            mainRuleId: "87273fff-2990-498e-926e-5cd2e50ef829", 
+            ruleName: "ClientTurnOn", 
+            ruleType: "DT",
+            orderNo:1
+          },
+          {
+            uniqueId: "b6c1bf63-fa24-422d-9362-6aac99b861a7", 
+            mainRuleId: "87273fff-2990-498e-926e-5cd2e50ef829", 
+            ruleName: "isClientTurnedOn", 
+            ruleType: "LR",
+            orderNo:2
+          }
+      ];
+    }
   }
 
+  onSubNodeClicked(node : ISubRuleDesc): void {
+    //fetch the data of the subrule using the subrule Id and the rule type
+    this.ruleType = node.ruleType; 
+    this.subRuleDesc = node;
+    console.log(this.subRuleDesc);    
+} 
   
-  constructor() {
+  constructor(private _ruleListService: RuleListService) {
     this.subRuleData = [];
-
   }
 
   ngOnInit(): void {
 
     //This jquery code is to toggle the tree
-    $(document).ready(function() {
+   // $(document).ready(function() {
       // Hide all nested lists by default
-      $('#tree1 ul').hide();
+      //$('#tree1 ul').hide();
     
       // Add click event to each node
-      $('#tree1 li').click(function(e) {
-        if ($(this).children('ul').length > 0) { // Check if clicked element is a parent node
-          // Toggle the nested list
-          $(this).children('ul').toggle();
-          e.stopPropagation(); // Stop event bubbling
-        }
-      });
+    //   $('#tree1 li').click(function(e) {
+    //     if ($(this).children('ul').length > 0) { // Check if clicked element is a parent node
+    //       // Toggle the nested list
+    //       $(this).children('ul').toggle();
+    //       e.stopPropagation(); // Stop event bubbling
+    //     }
+    //   });
     
-      // Add click event to each nested list item
-      $('#tree1 li ul li').click(function(e) {
-        e.stopPropagation(); // Stop event bubbling
-      });
-    });
+    //   // Add click event to each nested list item
+    //   $('#tree1 li ul li').click(function(e) {
+    //     e.stopPropagation(); // Stop event bubbling
+    //   });
+    // });
     
-    
-
-
     this.mainRuleData = [
       {
-          uniqueId : "1", 
+          uniqueId : "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b", 
           ruleName: "Mainrule1",
           isExpanded: false
         
