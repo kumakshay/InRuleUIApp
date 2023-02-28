@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DecisionServiceService } from '../Services/decision-service.service';
 import { NgForm } from '@angular/forms';
 import { ISubRuleDesc } from '../Interfaces/ISubRuleDesc';
+import { DecisionServiceService } from '../Services/DecisionTable/decision-service.service';
 @Component({
   selector: 'app-decision',
   templateUrl:'./decision.component.html',
