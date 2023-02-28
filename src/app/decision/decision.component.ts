@@ -23,7 +23,9 @@ export class DecisionComponent  implements OnInit {
 
   getData() {
     this.decisionServiceService.getData().subscribe(data => {
+      
       this.data = data;
+      
     });
   }
   
