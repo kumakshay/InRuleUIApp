@@ -13,11 +13,6 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-interface NgxSpinnerConfig {
-  type?: string;
-}
-
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,8 +29,8 @@ interface NgxSpinnerConfig {
     HttpClientModule,
     MonacoEditorModule.forRoot(),
     BrowserAnimationsModule,
-    NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
-      ],
+    NgxSpinnerModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
