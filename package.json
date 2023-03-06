@@ -28,6 +28,7 @@
     "jquery": "^3.6.3",
     "mdb-angular-ui-kit": "^4.0.0",
     "monaco-editor": "^0.34.1",
+    "monaco-languages": "^2.11.1",
     "ngx-monaco-editor-v2": "^15.0.1",
     "ngx-spinner": "^15.0.1",
     "rxjs": "~7.8.0",

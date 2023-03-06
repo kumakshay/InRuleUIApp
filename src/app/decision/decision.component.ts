@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ISubRuleDesc } from '../Interfaces/ISubRuleDesc';
+import { INotification } from '../Interfaces/INotification';
 import { DecisionServiceService } from '../Services/DecisionTable/decision-service.service';
 @Component({
   selector: 'app-decision',
@@ -9,24 +9,27 @@ import { DecisionServiceService } from '../Services/DecisionTable/decision-servi
 })
 export class DecisionComponent  implements OnInit {
 
-  @Input() subRuleDesc: ISubRuleDesc | undefined ;
-  data: any[] | undefined;
-  newItem: any = {};
+  @Input() subRuleDesc: any;
+  tableData: any[] = [{}];
   item: any = {};
   rowObjectForEdit: any = {};
-  showSuccessNotification : boolean = false;
-  constructor(private decisionServiceService: DecisionServiceService) { }
-
-  ngOnInit() {
-    this.getData();
+  notification : INotification = {showNotification: false,  notificationValue : "NA", notificationClassBootstrap : this.constants.bootstrapSuccessNotificationClass}
+  
+  constructor(private decisionServiceService: DecisionServiceService,
+    @Inject('Constants') private constants: any) {
   }
 
-  getData() {
-    this.decisionServiceService.getData().subscribe(data => {
-      
-      this.data = data;
-      
+  ngOnInit() {
+    this.getDecisionRuleData();
+  }
+
+  getDecisionRuleData() {
+    this.decisionServiceService.getDecisionRuleData(this.subRuleDesc.ruleName).subscribe(
+      data => {
+      this.tableData = data;
+      console.log(this.tableData)
     });
+    
   }
   
   //1. Once the edit button is clicked this function will be triggered.
@@ -36,36 +39,105 @@ export class DecisionComponent  implements OnInit {
     this.rowObjectForEdit = item;
   }
 
-  edit() {
-    // TODO: Implement edit functionality
+  updateExistingRow() {
     console.log(this.rowObjectForEdit);
-    this.decisionServiceService.updateData(this.rowObjectForEdit.id).subscribe(() => {
-      this.getData();
+    this.decisionServiceService.updateExistingRow(this.rowObjectForEdit.id).subscribe(data => {
+      
+      console.log(data);
+      if(data.status == "Updated Successfully")
+      {
+        this.notification.notificationClassBootstrap = this.constants.bootstrapSuccessNotificationClass;
+        this.notification.notificationValue = this.constants.rowSaveSuccessMessage;
+        this.notification.showNotification = true;
+        setTimeout(() => {
+          this.notification.showNotification = false;
+        }, 3000);  
+        this.getDecisionRuleData();
+      }
+      else
+      {
+        this.notification.notificationClassBootstrap = this.constants.bootstrapErrorNotificationClass;
+        this.notification.notificationValue = this.constants.rowSaveErrorMessage;
+        this.notification.showNotification = true;
+        setTimeout(() => {
+          this.notification.showNotification = false;
+        }, 3000);
+      }
     });
-    this.showSuccessNotification = true;
-    setTimeout(() => {
-      this.showSuccessNotification = false;
-   }, 3000);
   }
 
-  delete(id: number) {
-    console.log(id);
-    this.decisionServiceService.deleteData(id).subscribe(() => {
-      this.getData();
-    });
+  //Deleting a row -> Logic can be added if required in future
+  // delete(id: number) {
+  //   console.log(id);
+  //   this.decisionServiceService.deleteData(id).subscribe(() => {
+  //     this.getDecisionRuleData();
+  //   });
+  // }
+
+  addNewRow(form: NgForm) {
+        
+    //To Do. In future we will have to replace these string properties with the actions or the cloumn names
+    //The actions will have all the columns present for a particluar table rule.
+    //On the basis of the cloumn names the response will be created and the mapping will be done.
+    var newRow = { 
+      
+    "table" : this.subRuleDesc.ruleName, 
+    "data" : 
+    {
+      "clientid" : form.value.clientid,
+      "stateofissuance" : form.value.stateofissuance,
+      "allowed": form.value.allowed,
+      "orderno": this.getOrderNumber()
+    }
+  };
+    this.decisionServiceService.addNewRow(newRow).subscribe( 
+      
+    data => {
+
+        if(data.status == "Inserted Successfully")
+        {
+          this.notification.notificationClassBootstrap = this.constants.bootstrapSuccessNotificationClass;
+          this.notification.notificationValue = this.constants.rowSaveSuccessMessage;
+          this.getDecisionRuleData();
+          this.notification.showNotification = true;
+          setTimeout(() => {
+            this.notification.showNotification = false;
+          }, 3000); 
+        }  
+        else
+        {
+          this.notification.notificationClassBootstrap = this.constants.bootstrapErrorNotificationClass;
+          this.notification.notificationValue = this.constants.rowSaveErrorMessage;
+          this.notification.showNotification = true;
+          setTimeout(() => {
+            this.notification.showNotification = false;
+          }, 3000); 
+        }
+        },
+
+      Error=> {
+        this.notification.notificationClassBootstrap = this.constants.bootstrapErrorNotificationClass;
+        this.notification.notificationValue = this.constants.connectionErrorMessage;
+        this.notification.showNotification = true;
+        setTimeout(() => {
+          this.notification.showNotification = false;
+        }, 3000); 
+        console.log(Error)
+      }  
+        
+    );
   }
 
-  //Adding a row
-  add() {
-    this.decisionServiceService.addData(this.newItem).subscribe(() => {
-      this.getData();
-      this.newItem = {};
-    });
+  getOrderNumber() : number
+  {
+      var val = 0;
 
-    this.showSuccessNotification = true;
-    setTimeout(() => {
-      this.showSuccessNotification = false;
-   }, 3000);
+      val = this.tableData[this.tableData.length - 1].orderno;
+      if(val == 9999)
+      {
+        val = this.tableData[this.tableData.length - 2].orderno;
+      }
+      return ++val;
   }
   
 }

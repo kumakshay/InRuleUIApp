@@ -1,9 +1,7 @@
 import { Component, OnInit} from '@angular/core';
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {MatTreeFlatDataSource, MatTreeFlattener, MatTreeNodeOutlet} from '@angular/material/tree';
 import { IMainRuleDesc } from '../Interfaces/IMainRuleDesc';
 import { ISubRuleDesc } from '../Interfaces/ISubRuleDesc';
-import * as $ from 'jquery';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { RuleListService } from '../Services/RuleList/rule-list.service';
 
 @Component({
@@ -25,101 +23,55 @@ export class RuleListComponent  implements OnInit {
    //Get the sub-rules based on the unique id of the parent-rule. 
    //The result coming from the backend will be already sorted based on order number.
   node.isExpanded = !node.isExpanded;
-  //   this._ruleListService.getSubRulesOfMainRule(node.uniqueId).subscribe(
-  //     data => {
-  //          this.subRuleDesc = data;
-  //          console.log("This one is the data" + data)
-  //         },
-  // );
-  //console.log("This one " + node.subRules)
-    if(node.uniqueId == "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b")
-    {
-        node.subRules = [
+    this._ruleListService.getSubRulesOfMainRule(node.uniqueId).subscribe(
+      data => {
+           
+        //Data Mapping of SubRules Rule data  
+        //To Do: Optimize this mapping somehow
+        node.subRules = [];
+        for(let i = 0; i < data.length; i++) { 
+          node.subRules[i] = 
           {
-            uniqueId: "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b", 
-            mainRuleId: "87273fff-2990-498e-926e-5cd2e50ef829", 
-            ruleName: "ClientTurnOn", 
-            ruleType: "DT",
-            orderNo:1
-          },
-          {
-            uniqueId: "b6c1bf63-fa24-422d-9362-6aac99b861a7", 
-            mainRuleId: "87273fff-2990-498e-926e-5cd2e50ef829", 
-            ruleName: "isClientTurnedOn", 
-            ruleType: "LR",
-            orderNo:2
-          }
-      ];
-    }
+            uniqueId: data[i].unique_id,
+            mainRuleId: data[i].parentid,
+            ruleName: data[i].rulename,
+            ruleType: data[i].ruletype,
+            orderNo: data[i].orderno,
+          };
+        }
+      }
+      );
+  console.log("This one " + node.subRules)
   }
 
   onSubNodeClicked(node : ISubRuleDesc): void {
     //fetch the data of the subrule using the subrule Id and the rule type
-    this.ruleType = node.ruleType; 
+    this.ruleType = node.ruleType.toLowerCase(); 
     this.subRuleDesc = node;
     console.log(this.subRuleDesc);    
 } 
   
-  constructor(private _ruleListService: RuleListService) {
+  constructor(private spinner: NgxSpinnerService,private _ruleListService: RuleListService) {
     this.subRuleData = [];
   }
 
   ngOnInit(): void { 
-    this.mainRuleData = [
-      {
-          uniqueId : "fcd7f92e-2a4e-4fab-8a6a-637ff0796a0b", 
-          ruleName: "Mainrule1",
-          isExpanded: false
-        
-      },
-      {
-          uniqueId : "2", 
-          ruleName: "Mainrule2",
-          isExpanded: false
+    this._ruleListService.getMainRules().subscribe(
+      data => {
 
-      },
-      {
-          uniqueId : "3", 
-          ruleName: "Mainrule3",
-          isExpanded: false
-      },
-      {
-          uniqueId : "4", 
-          ruleName: "Mainrule4",
-          isExpanded: false
-      },
-    ];
-    
+        //Data Mapping of Main Rule data
+        //To Do: Optimize this mapping somehow
+        for(let i = 0; i < data.length; i++) { 
+          this.mainRuleData[i] = 
+          {
+            uniqueId: data[i].unique_id,
+            ruleName: data[i].rulename,
+            isExpanded: false
+          };
 
+        }
+      },
+  );
+  console.log("main rules" + this.mainRuleData)
   }
 }
-
-
-
-/* private _transformer = (node: IMainRuleDesc, level: number) => {
-    return {
-      expandable: !!node.childRules && node.childRules.length  > 0,
-      name: node.ruleName,
-      level: level,
-    };
-  };
- 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
-    node => node.level,
-    node => node.expandable,
-  );
-
-  treeFlattener = new MatTreeFlattener(
-    this._transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node
-  );
-  
-  //node => node.childRules
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener); */
-  //hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
- 
-
-
-

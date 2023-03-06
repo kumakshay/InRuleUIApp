@@ -1,6 +1,6 @@
 
 <div class="container-xl">
-	<div class="table-responsive">
+	<div class="table-responsive" >
 		<div class="table-wrapper">
 			<div class="table-title">
 				<div class="row">
@@ -26,14 +26,15 @@
 					</tr>
 				</thead>
 				<tbody>
-						<tr *ngFor="let item of data">
-						 <td>{{ item.clientId }} </td>
-						 <td>{{ item.stateOfIssuance }}</td>
-						 <td>Y</td>
+					
+						<tr *ngFor="let item of tableData">	
+						 <td>{{ item.clientid }} </td>
+						 <td>{{ item.stateofissuance }}</td>
+						 <td>{{ item.allowed }}</td>
 						  <td>
 							<a href="#editEmployeeModal" (click)="setRowObjectForEdit(item)" data-toggle="modal"><i class="material-icons">create</i></a>	
-						</td>
-					</tr>
+						  </td> 
+						</tr>
 				</tbody>
 			</table>
 			
@@ -45,10 +46,10 @@
 	<div class="modal-dialog">
 		
 		<div class="modal-content">
-			<div class="alert alert-success" role="alert" *ngIf="showSuccessNotification">
-				Data saved successfully!
+			<div [class] = "notification.notificationClassBootstrap" role="alert" *ngIf="notification.showNotification">
+				{{notification.notificationValue}}
 			 </div>
-			<form (submit)="add()">
+			<form #loginForm="ngForm" (submit)="addNewRow(loginForm)">
 				<div class="modal-header">						
 					<h4 class="modal-title">Add values</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -56,28 +57,39 @@
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Client Id</label>
-						<select [(ngModel)]="newItem.clientId"  [ngModelOptions]="{ standalone: true }" class="form-control">
+						<select name="clientid" #clientid ="ngModel" ngModel class="form-control">
 							<option value="180">180</option>
 							<option value="181">181</option>
 							<option value="182">182</option>
 							<option value="183">183</option>
 							<option value="184">184</option>
+							<option value="180">185</option>
+							<option value="181">186</option>
+							<option value="182">187</option>
+							<option value="183">188</option>
+							<option value="184">189</option>
+							<option value="180">200</option>
+							<option value="181">201</option>
+							<option value="182">211</option>
+							<option value="183">233</option>
+							<option value="184">234</option>
 						</select>
 						
 					</div>
 					<div class="form-group">
 						<label>State of Issuance</label>
-						<select [(ngModel)]="newItem.stateOfIssuance"  [ngModelOptions]="{ standalone: true }"  class="form-control">
+						<select name="stateofissuance" #stateofissuance="ngModel" ngModel class="form-control">
 							<option value="NE">NE</option>
 							<option value="NC">NC</option>
 							<option value="CA">CA</option>
 							<option value="NY">NY</option>
 							<option value="MI">MI</option>
+							<option value="MI">GA</option>
 						</select>
 					</div>
 					<div class="form-group">
 						<label>Allowed</label>
-						<select [(ngModel)]="newItem.Allowed" [ngModelOptions]="{ standalone: true }"  class="form-control">
+						<select name="allowed" #allowed="ngModel" ngModel class="form-control">
 							<option value="true">True</option>
 							<option value="false">False</option>
 						</select>
@@ -96,10 +108,10 @@
 	<div class="modal-dialog">
 		
 		<div class="modal-content">
-			<div class="alert alert-success" role="alert" *ngIf="showSuccessNotification">
-				Data saved successfully!
+			<div [class] ="notification.notificationClassBootstrap" role="alert" *ngIf="notification.showNotification">
+				{{notification.notificationValue}}
 			 </div>
-			<form (submit)="edit()">
+			<form (submit)="updateExistingRow()">
 				<div class="modal-header">						
 					<h4 class="modal-title">Update Values</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -107,18 +119,28 @@
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Client Id</label>
-						<select [(ngModel)]="rowObjectForEdit.clientId"  [ngModelOptions]="{ standalone: true }" class="form-control">
+						<select [(ngModel)]="rowObjectForEdit.clientid"  [ngModelOptions]="{ standalone: true }" class="form-control">
 							<option value="180">180</option>
 							<option value="181">181</option>
 							<option value="182">182</option>
 							<option value="183">183</option>
 							<option value="184">184</option>
+							<option value="180">185</option>
+							<option value="181">186</option>
+							<option value="182">187</option>
+							<option value="183">188</option>
+							<option value="184">189</option>
+							<option value="180">200</option>
+							<option value="181">201</option>
+							<option value="182">211</option>
+							<option value="183">233</option>
+							<option value="184">234</option>
 						</select>
 						
 					</div>
 					<div class="form-group">
 						<label>State of Issuance</label>
-						<select [(ngModel)]="rowObjectForEdit.stateOfIssuance"  [ngModelOptions]="{ standalone: true }"  class="form-control">
+						<select [(ngModel)]="rowObjectForEdit.stateofissuance"  [ngModelOptions]="{ standalone: true }"  class="form-control">
 							<option value="NE">NE</option>
 							<option value="NC">NC</option>
 							<option value="CA">CA</option>
@@ -128,7 +150,7 @@
 					</div>
 					<div class="form-group">
 						<label>Allowed</label>
-						<select [(ngModel)]="rowObjectForEdit.Allowed" [ngModelOptions]="{ standalone: true }"  class="form-control">
+						<select [(ngModel)]="rowObjectForEdit.allowed" [ngModelOptions]="{ standalone: true }"  class="form-control">
 							<option value="true">True</option>
 							<option value="false">False</option>
 						</select>
@@ -143,7 +165,7 @@
 	</div>
 </div>
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<!-- <div id="deleteEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<form>
@@ -163,7 +185,7 @@
 		</div>
 	</div>
 </div>
-
+ -->
 
 <!-- Pagination for table -->
 <!-- 
@@ -181,13 +203,3 @@
 			</div>
 -->
 
-
-<!-- <td>
-	<select>
-	  <option value="233">Healthy Blue NE</option>
-	  <option value="188">Anthem BCBSNH</option>
-	  <option value="85">Anthem CR</option>
-	  <option value="85">Anthem BA</option>
-	  <option value="85">BCBSNC</option>
-	</select>
-</td> -->

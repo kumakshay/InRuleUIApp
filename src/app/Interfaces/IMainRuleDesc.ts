@@ -1,5 +1,4 @@
 import { ISubRuleDesc } from "./ISubRuleDesc"
-
 export interface IMainRuleDesc{
     uniqueId : string,
     ruleName: string,

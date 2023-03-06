@@ -1,14 +1,46 @@
-<!--Loading animation-->
-<ngx-spinner
-  bdColor="rgba(51,51,51,0.8)"
-  size="medium"
-  color="#fff"
-  type="pacman">
-  <p style="font-size: 20px; color: white">Loading...</p>
-</ngx-spinner>
 
-<div class="editor">
-    <ngx-monaco-editor style="height: 100%" [options]="editorOptions" [(ngModel)]="code"  (onInit)="onMonacoEditorInit()"></ngx-monaco-editor>
+
+<div [class]="notification.notificationClassBootstrap" role="alert" *ngIf="notification.showNotification">
+  {{notification.notificationValue}}
 </div>
+
+
+<div class="btnandeditor">
+  
+  <div class="row">
+    
+    <div class="spinner" *ngIf = "loader">
+      <mat-spinner color="primary"></mat-spinner>
+    </div>
+    <div class="col" id="btn">
+      <div class="btn-group">
+        <button type="button" (click)="saveLanguageRule()" class = "btn btn-secondary">Save</button>
+        <button type="button" disbaled class="btn btn-secondary">Reload</button>
+        <button type="button" disbaled  class="btn btn-secondary">Run</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div style="position: relative;">
+        <ngx-spinner
+        bdColor="rgba(51,51,51,0.8)"
+        size="medium"
+        color="#435d7d"
+        type="pacman"
+        [fullScreen] = "false">
+        </ngx-spinner>
+      </div>
+      <ngx-monaco-editor class="editor" [options]="editorOptions" [(ngModel)]="code" (onInit)="onMonacoEditorInit()"></ngx-monaco-editor>
+    </div>
+  </div>
+  </div>
+  
+
+
+
+
+
+
 
 

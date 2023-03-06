@@ -12,7 +12,8 @@ import { FooterComponent } from './footer/footer.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import * as constants from 'src/app/Constants'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,8 +31,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MonacoEditorModule.forRoot(),
     BrowserAnimationsModule,
     NgxSpinnerModule,
+    MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [
+    { provide: 'Constants', useValue: constants }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
