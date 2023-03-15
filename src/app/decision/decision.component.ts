@@ -14,7 +14,8 @@ export class DecisionComponent  implements OnInit {
   item: any = {};
   rowObjectForEdit: any = {};
   notification : INotification = {showNotification: false,  notificationValue : "NA", notificationClassBootstrap : this.constants.bootstrapSuccessNotificationClass}
-  
+  modalSpinnerhide : boolean = true;
+  isDecisionTableLoaded : boolean = false;
   constructor(private decisionServiceService: DecisionServiceService,
     @Inject('Constants') private constants: any) {
   }
@@ -24,10 +25,13 @@ export class DecisionComponent  implements OnInit {
   }
 
   getDecisionRuleData() {
+    this.isDecisionTableLoaded = false;
     this.decisionServiceService.getDecisionRuleData(this.subRuleDesc.ruleName).subscribe(
       data => {
       this.tableData = data;
+      this.isDecisionTableLoaded = true;
       console.log(this.tableData)
+      
     });
     
   }
@@ -39,16 +43,23 @@ export class DecisionComponent  implements OnInit {
     this.rowObjectForEdit = item;
   }
 
-  updateExistingRow() {
+  updateExistingRow(form: NgForm) {
+    
+    this.modalSpinnerhide = false;
+    this.rowObjectForEdit.stateofissuance = form.value.stateofissuance;
+    this.rowObjectForEdit.allowed = form.value.allowed;
     console.log(this.rowObjectForEdit);
-    this.decisionServiceService.updateExistingRow(this.rowObjectForEdit.id).subscribe(data => {
+    this.decisionServiceService.updateExistingRow(this.rowObjectForEdit).subscribe(data => {
       
       console.log(data);
       if(data.status == "Updated Successfully")
       {
+        this.modalSpinnerhide = true;
         this.notification.notificationClassBootstrap = this.constants.bootstrapSuccessNotificationClass;
         this.notification.notificationValue = this.constants.rowSaveSuccessMessage;
         this.notification.showNotification = true;
+        form.resetForm();
+        
         setTimeout(() => {
           this.notification.showNotification = false;
         }, 3000);  
@@ -56,6 +67,7 @@ export class DecisionComponent  implements OnInit {
       }
       else
       {
+        this.modalSpinnerhide = true;
         this.notification.notificationClassBootstrap = this.constants.bootstrapErrorNotificationClass;
         this.notification.notificationValue = this.constants.rowSaveErrorMessage;
         this.notification.showNotification = true;
@@ -75,7 +87,7 @@ export class DecisionComponent  implements OnInit {
   // }
 
   addNewRow(form: NgForm) {
-        
+    this.modalSpinnerhide = false;    
     //To Do. In future we will have to replace these string properties with the actions or the cloumn names
     //The actions will have all the columns present for a particluar table rule.
     //On the basis of the cloumn names the response will be created and the mapping will be done.
@@ -96,8 +108,10 @@ export class DecisionComponent  implements OnInit {
 
         if(data.status == "Inserted Successfully")
         {
+          this.modalSpinnerhide = true;
           this.notification.notificationClassBootstrap = this.constants.bootstrapSuccessNotificationClass;
           this.notification.notificationValue = this.constants.rowSaveSuccessMessage;
+          form.resetForm();
           this.getDecisionRuleData();
           this.notification.showNotification = true;
           setTimeout(() => {
@@ -106,6 +120,7 @@ export class DecisionComponent  implements OnInit {
         }  
         else
         {
+          this.modalSpinnerhide = true;
           this.notification.notificationClassBootstrap = this.constants.bootstrapErrorNotificationClass;
           this.notification.notificationValue = this.constants.rowSaveErrorMessage;
           this.notification.showNotification = true;
@@ -116,6 +131,7 @@ export class DecisionComponent  implements OnInit {
         },
 
       Error=> {
+        this.modalSpinnerhide = true;
         this.notification.notificationClassBootstrap = this.constants.bootstrapErrorNotificationClass;
         this.notification.notificationValue = this.constants.connectionErrorMessage;
         this.notification.showNotification = true;

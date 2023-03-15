@@ -21,7 +21,8 @@ export class DecisionServiceService {
 
   updateExistingRow(data: any): Observable<any> {
     var param = "?id=" + data.clientid;
-    return this.http.put<any>(this.baseUrl + param, data).pipe(catchError(this.errorHandler));
+    var obj = [{"clientid": data.clientid, "stateofissuance": data.stateofissuance, "allowed": data.allowed}];
+    return this.http.put<any>(this.baseUrl + "/updates" + param, obj).pipe(catchError(this.errorHandler));
   }
 
   //Deletion logic can be added here if future requirement comes

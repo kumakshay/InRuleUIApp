@@ -23,6 +23,10 @@ export class RuleListService {
     return tempVar;
   }
 
+  addNewSubRuleForMainRule(data: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl + "insert", data).pipe(catchError(this.errorHandler));
+  }
+
   errorHandler(error: HttpErrorResponse) {
     console.error(error);
     return throwError(() => new Error(error.message || "Server Error"));

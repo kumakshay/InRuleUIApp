@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject} from '@angular/core';
+import { Component, Input, OnInit, Inject, OnChanges, SimpleChanges} from '@angular/core';
 import { ISubRuleDesc } from '../Interfaces/ISubRuleDesc';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LanguageRuleService } from '../Services/LanguageRule/language-rule.service';
@@ -9,7 +9,7 @@ import { INotification } from '../Interfaces/INotification';
   templateUrl: './language-rule.component.html',
   styleUrls: ['./language-rule.component.css'],
 })
-export class LanguageRuleComponent implements OnInit{
+export class LanguageRuleComponent implements OnInit, OnChanges{
 
   @Input() subRuleDesc: any;
   editorOptions = {
@@ -24,11 +24,25 @@ export class LanguageRuleComponent implements OnInit{
   constructor(private spinner: NgxSpinnerService, 
     private _languageRuleService : LanguageRuleService, 
     @Inject('Constants') private constants: any) {
+
+    
+
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    // Check for changes in the input property and update nodeType and subRuleDesc accordingly
+    if (changes['subRuleDesc'] && changes['subRuleDesc'].currentValue) {
+      this.getLanguageRuleData();
+    }
   }
   
   ngOnInit() {
     this.spinner.show();
+    this.getLanguageRuleData();
+    
+}
 
+getLanguageRuleData()
+{
     //Getting the rule data 
     this._languageRuleService.getLanguageRuleData(this.subRuleDesc.ruleName).subscribe(
       
@@ -36,10 +50,7 @@ export class LanguageRuleComponent implements OnInit{
       this.code = data.languageRule;
       console.log(data.languageRule);
     });
-
-
 }
-
 saveLanguageRule() : void {
   this._languageRuleService.saveLanguageRule(this.subRuleDesc.ruleName, this.code).subscribe(
     data => {

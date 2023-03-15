@@ -1,9 +1,11 @@
 <!-- HTML -->
-<!-- <div class="container-fluid"> -->
   <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
       <div class="sidebar-sticky">
-        <div class="header">Rule List</div>
+        <div class="header">Rule List 
+						<div class="spinner-border spinner-border-sm" role="status" [hidden]="isRuleListLoaded">
+					  </div>
+        </div>
         <ul class="nav flex-column">
           
           <!--Tree starts-->
@@ -14,13 +16,20 @@
                   <ul id="tree1">
 
                     <li class="node" *ngFor="let mrd of mainRuleData">
-                      <div (click)="onNodeClicked(mrd)" style="display: flex; align-items: center;">
-                        <i class="material-icons hover">chevron_right</i>
-                        <span>{{ mrd.ruleName }}</span>
+
+                      <div style="display: flex; align-items: center;">
+                        
+                        <i (click)="onNodeClicked(mrd)" class="material-icons hover">chevron_right</i>
+                        <span>{{ mrd.ruleName}}</span> &nbsp;  &nbsp; 
+                        <!--This button is for adding subrules; It will open a bootstrap modal-->
+                        <a title="Settings." href="#NewSubRuleDescModal" (click)="setTheParentForWhichSubruleIsToBeAdded(mrd)" data-toggle="modal"><i class="fa-solid fa-gears"></i></a>
                       </div>
-                      <ul *ngIf="mrd.isExpanded">
+                      
+                      									
+                      
+                      <ul *ngIf="mrd.isExpanded && mrd.subRules[0].ruleName !='NA'">
                         <li class="node" *ngFor="let crd of mrd.subRules">
-                          
+        
                         <div (click)="onSubNodeClicked(crd)" style="display: flex; align-items: center;">
                             <i class="material-icons hover">chevron_right</i>
                           {{ crd.ruleName }}
@@ -41,7 +50,7 @@
       
     </main>
   </div>
-<!-- </div> -->
+
 
 <div *ngIf="ruleType == 'languagerule'">
   <app-language-rule [subRuleDesc] = "subRuleDesc"></app-language-rule>
@@ -51,4 +60,48 @@
 </div>
 
 
+<!--Desc: Add subrule bootstrap modal-->
+<!--To Do: This will be a completely a separate component which will be handling the adding of a subrule.-->
+<div id="NewSubRuleDescModal" class="modal fade">
+	<div class="modal-dialog">
+		
+		<div class="modal-content">
+			<div [class] = "notification.notificationClassBootstrap" role="alert" *ngIf="notification.showNotification">
+				{{notification.notificationValue}}
+			 </div>
+			<form #NewSubRuleDesc="ngForm" (submit)="addNewSubRuleDesc(NewSubRuleDesc)">
+				<div class="modal-header">						
+					<h4 class="modal-title">Settings</h4>
+          &nbsp;&nbsp;&nbsp;
+					<div class="text-center">
+						<div class="spinner-border" role="status" [hidden]="modalSpinnerhide">
+						  <span class="sr-only">Loading...</span>
+						</div>
+					  </div>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">	
+          <div>
+            <h6 class="modal-title">Add another Sub-rule</h6>
+          </div>
+          <br>				
+					<div class="form-group">
+						<label>Rule Type</label>
+						<select name="ruleTypes" #ruleTypes ="ngModel" ngModel class="form-control">
+							<option value="LanguageRule">Language Rule</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Rule Name</label>
+            <input name="ruleName" #ruleName ="ngModel" ngModel type="text" class="form-control">
+					</div>				
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-success" value="Add">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 

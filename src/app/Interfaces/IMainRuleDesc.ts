@@ -2,6 +2,6 @@ import { ISubRuleDesc } from "./ISubRuleDesc"
 export interface IMainRuleDesc{
     uniqueId : string,
     ruleName: string,
-    subRules?: ISubRuleDesc[],
+    subRules: ISubRuleDesc[],
     isExpanded: Boolean,
   }
